@@ -1,0 +1,15 @@
+﻿################################################################################
+# Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/BookSamsys/DesignTimeBuild/.dtbcache.v2
+/.vs/BookSamsys/v17
+/BookSamsys/.vs/BookSamsys/FileContentIndex/b605f5c6-c130-4d9e-b4f8-c9d4bcc6c6c5.vsidx
+/BookSamsys/.vs/BookSamsys/v17
+/BookSamsys/.vs
+/BookSamsys/bin/Debug/net8.0
+/BookSamsys/obj/Debug/net8.0
+/BookSamsys/obj/Release/net8.0
+/BookSamsys/obj
+/.vs/BookSamsys/FileContentIndex
+/.vs/ProjectEvaluation
