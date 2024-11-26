@@ -20,7 +20,17 @@ using BookSamsys.Models;
         };
         await _repository.AddAsync(newautor);
     }
-        public async Task UpdateAsync(Author autor) => await _repository.UpdateAsync(autor);
+    public async Task UpdateAsync(AtualizarAutorDTO autor)
+    {
+
+        Author upautor = new()
+        {
+            Id = autor.id,
+           
+            Name = autor.Name
+        };
+        await _repository.UpdateAsync(upautor);
+    }
         public async Task DeleteAsync(int id) => await _repository.DeleteAsync(id);
     }
 

@@ -1,4 +1,5 @@
-﻿using BookSamsys.Models;
+﻿using BookSamsys.DTO;
+using BookSamsys.Models;
 
 
 
@@ -34,23 +35,41 @@ public class BookService : IBookService
         return await _repository.ObterPorISBNAsync(isbn);
     }
 
-    public async Task AdicionarLivroAsync(Book livro)
+    public async Task AdicionarLivroAsync(AddLivrosDto livro)
     {
+
+        Book addlivro = new()
+        {
+            ISBN = livro.ISBN,
+            BookName = livro.BookName,
+            IdAuthor = livro.authorid,
+            AuthorName = livro.AuthorName,
+            Price = livro.Price
+        };
         if (livro.Price < 0)
             throw new ArgumentException("Preço não pode ser negativo.");
 
         if (await _repository.ObterPorISBNAsync(livro.ISBN) != null)
             throw new ArgumentException("ISBN já cadastrado.");
 
-        await _repository.AdicionarLivroAsync(livro);
+        await _repository.AdicionarLivroAsync(addlivro);
     }
 
-    public async Task AtualizarLivroAsync(Book livro)
+    public async Task AtualizarLivroAsync(UpdateLivrosDto livro)
     {
+        Book uplivro = new()
+        {
+            ISBN = livro.ISBN,
+            BookName = livro.BookName,
+            IdAuthor = livro.authorid,
+            AuthorName = livro.AuthorName,
+            Price = livro.Price
+        };
+
         if (livro.Price < 0)
             throw new ArgumentException("Preço não pode ser negativo.");
 
-        await _repository.AtualizarLivroAsync(livro);
+        await _repository.AtualizarLivroAsync(uplivro);
     }
 
     public async Task ExcluirLivroAsync(string isbn)

@@ -47,14 +47,18 @@ public class AutorsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] Author autor)
+    public async Task<IActionResult> Update( [FromBody] AtualizarAutorDTO autor)
     {
-        if (id != autor.Id || !ModelState.IsValid) return BadRequest();
-        var existingAuthor = await _service1.GetByIdAsync(id);
-        if (existingAuthor == null) return NotFound();
+
+
+        // if (id != autor.id || !ModelState.IsValid) return BadRequest();
+        //var existingAuthor = await _service1.GetByIdAsync(id);
+        //if (existingAuthor == null) return NotFound();
+
+        if (!ModelState.IsValid) return BadRequest(ModelState);
 
         await _service1.UpdateAsync(autor);
-        return NoContent();
+        return Ok();
     }
 
     [HttpDelete("{id}")]

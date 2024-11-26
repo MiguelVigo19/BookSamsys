@@ -14,7 +14,7 @@ namespace BookSamsys.Data
         public DbSet<Book> Livros2 { get; set; }
         public DbSet<Author> Autores { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+       /* protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configure one-to-many relationship
             modelBuilder.Entity<Book>()
@@ -22,7 +22,7 @@ namespace BookSamsys.Data
                 .WithMany(a => a.Books)
                 .HasForeignKey(l => l.IdAuthor)
                 .OnDelete(DeleteBehavior.Cascade); // Cascade delete
-        }
+        }*/
 
 
     }

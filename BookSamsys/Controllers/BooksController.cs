@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookSamsys.Models;
 using BookSamsys;
+using BookSamsys.DTO;
 
 
 [ApiController]
@@ -43,7 +44,7 @@ public class BooksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AdicionarLivro(Book livro)
+    public async Task<IActionResult> AdicionarLivro(AddLivrosDto livro)
     {
         try
         {
@@ -57,11 +58,11 @@ public class BooksController : ControllerBase
     }
 
     [HttpPut("{isbn}")]
-    public async Task<IActionResult> AtualizarLivro(string isbn, Book livro)
+    public async Task<IActionResult> AtualizarLivro(string isbn, UpdateLivrosDto livro)
     {
         if (isbn != livro.ISBN)
             return BadRequest("ISBN não pode ser alterado.");
-
+        
         try
         {
             await _service.AtualizarLivroAsync(livro);
