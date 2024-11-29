@@ -62,7 +62,11 @@ public class BooksController : ControllerBase
     {
         if (isbn != livro.ISBN)
             return BadRequest("ISBN não pode ser alterado.");
-        
+
+        var livroexist = await _service.ObterPorISBNAsync(isbn);
+        if (livroexist == null) 
+            return NotFound($"O livro com o isbn: {isbn} não encontrado.");
+
         try
         {
             await _service.AtualizarLivroAsync(livro);
@@ -77,8 +81,20 @@ public class BooksController : ControllerBase
     [HttpDelete("{isbn}")]
     public async Task<IActionResult> ExcluirLivro(string isbn)
     {
-        await _service.ExcluirLivroAsync(isbn);
-        return NoContent();
+
+        var livroexist = await _service.ObterPorISBNAsync(isbn);
+        if (livroexist == null)
+            return NotFound($"O livro com o isbn: {isbn} não encontrado.");
+        try
+        {
+            await _service.ExcluirLivroAsync(isbn);
+            return NoContent();
+        }
+
+        catch(Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
 }

@@ -47,24 +47,48 @@ public class AutorsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update( [FromBody] AtualizarAutorDTO autor)
+    public async Task<IActionResult> Update( int id,[FromBody] AtualizarAutorDTO autor)
     {
+        if (id != autor.id)
+            return BadRequest("O id nao é igual.");
 
+         var existingAutor = await _service1.GetByIdAsync(id);
+        if (existingAutor == null)
+            return NotFound($"Autor com o id {id} não foi encontrado.");
 
-        // if (id != autor.id || !ModelState.IsValid) return BadRequest();
-        //var existingAuthor = await _service1.GetByIdAsync(id);
-        //if (existingAuthor == null) return NotFound();
+        try
+        {
+            await _service1.UpdateAsync(autor);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
 
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        await _service1.UpdateAsync(autor);
-        return Ok();
+       
+        
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        await _service1.DeleteAsync(id);
-        return NoContent();
+
+        var existingAutor = await _service1.GetByIdAsync(id);
+        if (existingAutor == null)
+            return NotFound($"Autor com o id {id} não foi encontrado.");
+
+
+        try
+        {
+            await _service1.DeleteAsync(id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+       
     }
 }
