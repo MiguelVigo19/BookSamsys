@@ -47,16 +47,12 @@ public class AutorsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update( int id,[FromBody] AtualizarAutorDTO autor)
+    public async Task<IActionResult> Update(int id, [FromBody] AtualizarAutorDTO autor)
     {
-        if (id != autor.id)
-            return BadRequest("O id nao é igual.");
+        if(id != autor.id) return BadRequest(ModelState);
 
-         var existingAutor = await _service1.GetByIdAsync(id);
-        if (existingAutor == null)
-            return NotFound($"Autor com o id {id} não foi encontrado.");
-
-        try
+        
+       try
         {
             await _service1.UpdateAsync(autor);
             return NoContent();

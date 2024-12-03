@@ -22,16 +22,24 @@ using BookSamsys.Models;
     }
     public async Task UpdateAsync(AtualizarAutorDTO autor)
     {
-
-        Author upautor = new()
+        var existingAuthor = await _repository.GetByIdAsync(autor.id);
+        if (existingAuthor == null)
         {
-            Id = autor.id,
-           
-            Name = autor.Name
-        };
-        await _repository.UpdateAsync(upautor);
+            throw new KeyNotFoundException($"Author with ID {autor.id} not found.");
+        }
+
+        // Atualiza as propriedades da entidade existente
+        existingAuthor.Name = autor.Name;
+
+        // Passa a entidade atualizada para o repositório
+        await _repository.UpdateAsync(existingAuthor);
     }
-        public async Task DeleteAsync(int id) => await _repository.DeleteAsync(id);
-    }
+      
+    
+    public async Task DeleteAsync(int id) => await _repository.DeleteAsync(id);
+    
+
+
+  }
 
 

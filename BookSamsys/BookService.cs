@@ -57,19 +57,24 @@ public class BookService : IBookService
 
     public async Task AtualizarLivroAsync(UpdateLivrosDto livro)
     {
-        Book uplivro = new()
+        var existingbook= await _repository.ObterPorISBNAsync(livro.ISBN);
+        if (existingbook == null)
         {
-            ISBN = livro.ISBN,
-            BookName = livro.BookName,
-            IdAuthor = livro.authorid,
-            AuthorName = livro.AuthorName,
-            Price = livro.Price
-        };
+            throw new KeyNotFoundException($"Book with isbn {livro.ISBN} not found.");
+        }
+        existingbook.ISBN = livro.ISBN;
+            existingbook.BookName = livro.BookName;
+        existingbook.IdAuthor = livro.authorid;
+        existingbook.AuthorName = livro.AuthorName;
+        existingbook.Price = livro.Price;
+
+
+        
 
         if (livro.Price < 0)
             throw new ArgumentException("Preço não pode ser negativo.");
 
-        await _repository.AtualizarLivroAsync(uplivro);
+        await _repository.AtualizarLivroAsync(existingbook);
     }
 
     public async Task ExcluirLivroAsync(string isbn)

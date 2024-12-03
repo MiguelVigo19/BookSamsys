@@ -35,7 +35,11 @@ using Microsoft.EntityFrameworkCore;
 
         public async Task UpdateAsync(Author autor)
         {
-            _context.Autores.Update(autor);
+        _context.Autores.Attach(autor);
+        _context.Entry(autor).Property(x => x.Name).IsModified = true;
+        await _context.SaveChangesAsync();
+
+        _context.Autores.Update(autor);
             await _context.SaveChangesAsync();
         }
 
