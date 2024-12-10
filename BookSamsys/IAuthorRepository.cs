@@ -1,5 +1,5 @@
 ﻿using BookSamsys.Models;
-
+using BookSamsys.DTO;
 
 
     public interface IAuthorRepository

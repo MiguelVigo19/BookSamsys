@@ -1,6 +1,7 @@
 ﻿using BookSamsys.Data;
 using BookSamsys.Models;
 using Microsoft.EntityFrameworkCore;
+using BookSamsys.DTO;
 
 
     public class AuthorRepository : IAuthorRepository

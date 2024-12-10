@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookSamsys.Migrations
 {
     [DbContext(typeof(BookDbContext))]
-    [Migration("20241122120009_FinalePlease")]
-    partial class FinalePlease
+    [Migration("20241210121759_Tabelas")]
+    partial class Tabelas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,8 @@ namespace BookSamsys.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -46,10 +47,6 @@ namespace BookSamsys.Migrations
                     b.Property<string>("ISBN")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AuthorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("BookName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -60,8 +57,9 @@ namespace BookSamsys.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(6, 2)");
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ISBN");
 

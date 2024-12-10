@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BookSamsys.Models;
 using BookSamsys;
 using BookSamsys.DTO;
+using NuGet.Protocol.Core.Types;
 
 
 [ApiController]
@@ -26,8 +27,8 @@ public class BooksController : ControllerBase
     {
         var livros = await _service.ListarLivrosAsync(page, pageSize);
         return Ok(livros);
-       
-        
+
+
     }
 
 
@@ -46,6 +47,13 @@ public class BooksController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AdicionarLivro(AddLivrosDto livro)
     {
+        if (string.IsNullOrEmpty(livro.BookName))
+            throw new Exception("O título do livro é obrigatório.");
+
+        
+
+        if (await _service.ObterPorISBNAsync(livro.ISBN) != null)
+            throw new ArgumentException("ISBN já cadastrado.");
         try
         {
             await _service.AdicionarLivroAsync(livro);
@@ -63,7 +71,7 @@ public class BooksController : ControllerBase
         if (isbn != livro.ISBN)
             return BadRequest("ISBN não pode ser alterado.");
 
-      
+
 
         try
         {
@@ -89,7 +97,7 @@ public class BooksController : ControllerBase
             return NoContent();
         }
 
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
@@ -97,7 +105,3 @@ public class BooksController : ControllerBase
 
 }
 
-
-   
-
-   

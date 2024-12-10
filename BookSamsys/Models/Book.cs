@@ -19,10 +19,10 @@ namespace BookSamsys.Models
         [JsonIgnore]
         public  Author  Author { get; set; } = null!;
 
-        public string AuthorName    { get; set; } = null!;
+      
 
-        [Column(TypeName = "decimal(6, 2)")]
-        public decimal Price { get; set; }
+       
+        public string Price { get; set; }=null!;
 
         [JsonIgnore]
         public bool IsDeleted { get; set; } = false; // Soft delete flag

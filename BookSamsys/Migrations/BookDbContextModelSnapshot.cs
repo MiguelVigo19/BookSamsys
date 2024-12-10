@@ -44,10 +44,6 @@ namespace BookSamsys.Migrations
                     b.Property<string>("ISBN")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AuthorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("BookName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -58,8 +54,9 @@ namespace BookSamsys.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(6, 2)");
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ISBN");
 
