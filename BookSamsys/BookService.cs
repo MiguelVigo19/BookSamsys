@@ -25,18 +25,37 @@ public class BookService : IBookService
         {
             ISBN = l.ISBN,
             BookName = l.BookName,
-            IdAuthor = l.Author.Id,
+            AuthorName = l.Author.Name,
+            IdAuthor = l.IdAuthor,
             Price = l.Price,
-            AuthorName = l.Author.Name
-            // Adiciona o nome do autor no DTO
-        });
+        }
+        );
+        
 
 
     }
 
-    public async Task<Book?> ObterPorISBNAsync(string isbn)
+    public async Task<BookDTO?> ObterPorISBNAsync(string isbn)
     {
-        return await _repository.ObterPorISBNAsync(isbn);
+        
+        var livro=await _repository.ObterPorISBNAsync(isbn);
+        return new BookDTO
+        {
+            ISBN = livro.ISBN,
+            BookName = livro.BookName,
+            AuthorName = livro.Author.Name,
+            IdAuthor=livro.IdAuthor,
+            Price=livro.Price
+        };
+        
+
+          
+
+      
+
+
+
+
     }
 
 
@@ -48,26 +67,13 @@ public class BookService : IBookService
     public async Task AdicionarLivroAsync(AddLivrosDto livro)
     {
 
-        var autorExistente = await _repository.ObterAutorPorIdAsync(livro.IdAuthor);
-        if (autorExistente == null)
-        {
-            throw new Exception("O autor especificado não existe.");
-        }
-
-        var livroExistente = await _repository.ObterPorISBNAsync(livro.ISBN);
-        if (autorExistente == null)
-        {
-            throw new Exception("O lIVRO especificado não existe.");
-        }// Verificar se o ISBN já existe
-
-        // Mapear o livro
+      // Mapear o livro
         Book addLivro = new()
         {
-            ISBN = livro.ISBN!,
-            BookName = livro.BookName!,
-            IdAuthor = livro.IdAuthor!,
-            Author = autorExistente, // Associa o autor existente
-            Price = livro.Price!
+            ISBN = livro.ISBN,
+            BookName = livro.BookName,
+            IdAuthor = livro.IdAuthor,
+            Price = livro.Price
         };
 
         // Adicionar o livro

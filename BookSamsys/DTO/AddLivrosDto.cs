@@ -1,13 +1,19 @@
-﻿namespace BookSamsys.DTO
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+
+namespace BookSamsys.DTO
 {
     public class AddLivrosDto
     {
-        public string? ISBN { get; set; }
+        [Key]public string? ISBN { get; set; }
         public string? BookName { get; set; }
-        
+       
         public int IdAuthor { get; set; }
 
         public string? Price { get; set; }
+       
 
     }
 }

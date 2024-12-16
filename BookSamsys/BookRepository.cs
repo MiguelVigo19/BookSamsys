@@ -1,6 +1,7 @@
 ﻿using BookSamsys.Models;
 using Microsoft.EntityFrameworkCore;
 using BookSamsys.Data;
+using BookSamsys.DTO;
 
 
 
@@ -22,7 +23,7 @@ public class BookRepository : IBookRepository
     public async Task<IEnumerable<Book>> ListarLivrosAsync(int page, int pageSize)
     {
         return await _context.Livros2
-            .Include(l => l.Author) // Inclui os dados do Autor
+            .Include(l => l.Author)
             .Where(l => !l.IsDeleted)
             .OrderBy(l => l.BookName)
             .Skip((page - 1) * pageSize)
@@ -41,7 +42,9 @@ public class BookRepository : IBookRepository
 
     public async Task<Book?> ObterPorISBNAsync(string isbn)
     {
-        return await _context.Livros2.FirstOrDefaultAsync(l => l.ISBN == isbn && !l.IsDeleted);
+        return await _context.Livros2.
+            Include(l => l.Author)
+            .FirstOrDefaultAsync(l => l.ISBN == isbn && !l.IsDeleted);
     }
 
 

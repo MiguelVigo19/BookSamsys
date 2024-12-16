@@ -7,7 +7,7 @@ using BookSamsys.Models;
 
     {
         Task<IEnumerable<BookDTO>> ListarLivrosAsync(int page, int pageSize);
-        Task<Book?> ObterPorISBNAsync(string isbn);
+        Task<BookDTO?> ObterPorISBNAsync(string isbn);
         Task AdicionarLivroAsync(AddLivrosDto livro);
         Task AtualizarLivroAsync(UpdateLivrosDto livro);
         Task ExcluirLivroAsync(string isbn);

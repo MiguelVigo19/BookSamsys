@@ -41,6 +41,7 @@ public class BooksController : ControllerBase
     {
         var livro = await _service.ObterPorISBNAsync(isbn);
         if (livro == null) return NotFound("Livro não encontrado.");
+
         return Ok(livro);
     }
 
@@ -50,10 +51,8 @@ public class BooksController : ControllerBase
         if (string.IsNullOrEmpty(livro.BookName))
             throw new Exception("O título do livro é obrigatório.");
 
-        
 
-        if (await _service.ObterPorISBNAsync(livro.ISBN) != null)
-            throw new ArgumentException("ISBN já cadastrado.");
+
         try
         {
             await _service.AdicionarLivroAsync(livro);
