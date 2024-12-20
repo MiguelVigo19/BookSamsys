@@ -46,21 +46,31 @@ public class BooksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AdicionarLivro(AddLivrosDto livro)
+    public async Task<IActionResult> AdicionarLivro( AddLivrosDto livro)
     {
+        // Validação do ISBN
+        if (string.IsNullOrEmpty(livro.ISBN))
+            return BadRequest("O ISBN é obrigatório.");
+
+        // Validação do nome do livro
         if (string.IsNullOrEmpty(livro.BookName))
-            throw new Exception("O título do livro é obrigatório.");
+            return BadRequest("O título do livro é obrigatório.");
 
-
+        // Verificação se o livro já existe
+        var livroExistente = await _service.ObterPorISBNAsync(livro.ISBN);
+        if (livroExistente != null) // Livro já existe
+            return Conflict("O livro já existe no sistema.");
 
         try
         {
+            // Adicionar o livro
             await _service.AdicionarLivroAsync(livro);
             return CreatedAtAction(nameof(ObterPorISBN), new { isbn = livro.ISBN }, livro);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            // Tratar erros inesperados
+            return StatusCode(500, $"Erro interno: {ex.Message}");
         }
     }
 

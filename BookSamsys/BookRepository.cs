@@ -68,6 +68,7 @@ public class BookRepository : IBookRepository
         if (livro != null)
         {
             livro.IsDeleted = true;
+
             await _context.SaveChangesAsync();
         }
     }

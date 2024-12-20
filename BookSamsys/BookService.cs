@@ -35,6 +35,12 @@ public class BookService : IBookService
 
     }
 
+
+    
+
+
+
+
     public async Task<BookDTO?> ObterPorISBNAsync(string isbn)
     {
         
@@ -95,14 +101,8 @@ public class BookService : IBookService
         existingbook.IdAuthor = livro.authorid;
         
         existingbook.Price = livro.Price;
-
-
-
-
-       
-
-        await _repository.AtualizarLivroAsync(existingbook);
-    }
+await _repository.AtualizarLivroAsync(existingbook);
+ }
 
     public async Task ExcluirLivroAsync(string isbn)
     {
