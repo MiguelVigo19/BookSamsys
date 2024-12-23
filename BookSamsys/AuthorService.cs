@@ -12,14 +12,27 @@ using BookSamsys.Models;
         }
         public async Task<IEnumerable<Author>> GetAllAsync() => await _repository.GetAllAsync();
         public async Task<Author> GetByIdAsync(int id) => await _repository.GetByIdAsync(id);
+
+
+
+
     public async Task AddAsync(AddAutordto autor)
     {
         Author newautor = new()
         { 
             Name = autor.Name
         };
+        if (string.IsNullOrWhiteSpace(autor.Name))
+            throw new ArgumentException("Name is required.");
+
+
         await _repository.AddAsync(newautor);
     }
+
+
+
+
+
     public async Task UpdateAsync(AtualizarAutorDTO autor)
     {
         var existingAuthor = await _repository.GetByIdAsync(autor.id);

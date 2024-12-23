@@ -8,17 +8,29 @@ using System.Threading.Tasks;
 public class BookService : IBookService
 {
     private readonly IBookRepository _repository;
-    private readonly MessagingHelper _messagingHelper;
+    
 
-    public BookService(IBookRepository repository, MessagingHelper messagingHelper)
+    public BookService(IBookRepository repository )
     {
         _repository = repository;
-        _messagingHelper = messagingHelper;
+        
     }
 
     public async Task<IEnumerable<BookDTO>> ListarLivrosAsync(int page, int pageSize)
     {
         var livros = await _repository.ListarLivrosAsync(page, pageSize);
+        var messageDto = new MessageDTO { Message = "Listar Livros !" };
+        var messagingHelper = new MessagingHelperDTO();
+        messagingHelper.SendMessage(messageDto);
+
+        if (messageDto.Success == true)
+        {
+            Console.WriteLine("A mensagem foi enviada com sucesso.");
+        }
+        else
+        {
+            Console.WriteLine("Falha ao enviar a mensagem.");
+        }
         return livros.Select(l => new BookDTO
         {
             ISBN = l.ISBN,
@@ -50,20 +62,14 @@ public class BookService : IBookService
     {
         return await _repository.ObterAutorPorIdAsync(id);
     }
+
+
+
     /**********************************add********************************/
 
 
     public async Task AdicionarLivroAsync(AddLivrosDto livro)
     {
-        // Mapear o livro
-        Book addLivro = new()
-        {
-            ISBN = livro.ISBN,
-            BookName = livro.BookName,
-            IdAuthor = livro.IdAuthor,
-            Price = livro.Price
-        };
-
         // Validação do ISBN
         if (string.IsNullOrEmpty(livro.ISBN))
             throw new ArgumentException("O ISBN é obrigatório.");
@@ -74,16 +80,51 @@ public class BookService : IBookService
 
         // Verificação se o livro já existe
         var livroExistente = await _repository.ObterPorISBNAsync(livro.ISBN);
-        if (livroExistente != null)
+        if (livroExistente != null) 
             throw new InvalidOperationException("O livro já existe no sistema.");
+
+
+
+
+        // Mapear o livro
+        Book addLivro = new()
+        {
+            ISBN = livro.ISBN,
+            BookName = livro.BookName,
+            IdAuthor = livro.IdAuthor,
+            Price = livro.Price
+        };
+
+       
+           
 
         // Adicionar o livro
         await _repository.AdicionarLivroAsync(addLivro);
 
         // Enviar notificação
-        string message = $"Livro adicionado: ISBN={livro.ISBN}, Nome={livro.BookName}";
-        _messagingHelper.SendMessage("BookNotifications", message);
+        // Instância do helper
+        var messageDto = new MessageDTO { Message = "Olá, Mundo!" };
+        var messagingHelper = new MessagingHelperDTO();
+        messagingHelper.SendMessage(messageDto);
+
+        if (messageDto.Success== true)
+        {
+            Console.WriteLine("A mensagem foi enviada com sucesso.");
+        }
+        else
+        {
+            Console.WriteLine("Falha ao enviar a mensagem.");
+        }
+        
+
+
+
+        // Enviar mensagem
+        messagingHelper.SendMessage(messageDto);
+        
     }
+
+
 
 
     /*************************************update**********************************/
@@ -102,9 +143,12 @@ public class BookService : IBookService
         await _repository.AtualizarLivroAsync(existingBook);
 
         // Enviar notificação
-        string message = $"Livro atualizado: ISBN={livro.ISBN}, Nome={livro.BookName}";
-        _messagingHelper.SendMessage("BookNotifications", message);
+        
     }
+
+
+
+
     /***********************************delete**************************************/
 
 
@@ -117,7 +161,6 @@ public class BookService : IBookService
         await _repository.ExcluirLivroAsync(isbn);
 
         // Enviar notificação
-        string message = $"Livro excluído: ISBN={isbn}";
-        _messagingHelper.SendMessage("BookNotifications", message);
+        
     }
 }
