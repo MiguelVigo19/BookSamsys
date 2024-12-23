@@ -34,14 +34,14 @@ public class AutorsController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var autor = await _service1.GetByIdAsync(id);
-        if (autor == null) return NotFound();
+        //if (autor == null) return NotFound();
         return Ok(autor);
     }
 
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] AddAutordto autor)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        //if (!ModelState.IsValid) return BadRequest(ModelState);
         await _service1.AddAsync(autor);
         return Ok();
     }
@@ -49,18 +49,12 @@ public class AutorsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] AtualizarAutorDTO autor)
     {
-        if(id != autor.id) return BadRequest(ModelState);
+       // if(id != autor.id) return BadRequest(ModelState);
 
-        
-       try
-        {
-            await _service1.UpdateAsync(autor);
+       
+           await _service1.UpdateAsync(autor);
             return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+   
 
        
         
@@ -70,20 +64,15 @@ public class AutorsController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
 
-        var existingAutor = await _service1.GetByIdAsync(id);
-        if (existingAutor == null)
-            return NotFound($"Autor com o id {id} não foi encontrado.");
+        //var existingAutor = await _service1.GetByIdAsync(id);
+        //if (existingAutor == null)
+          //  return NotFound($"Autor com o id {id} não foi encontrado.");
 
 
-        try
-        {
+       
             await _service1.DeleteAsync(id);
             return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+      
 
        
     }

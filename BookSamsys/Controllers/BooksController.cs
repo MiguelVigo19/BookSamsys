@@ -40,76 +40,37 @@ public class BooksController : ControllerBase
     public async Task<IActionResult> ObterPorISBN(string isbn)
     {
         var livro = await _service.ObterPorISBNAsync(isbn);
-        if (livro == null) return NotFound("Livro não encontrado.");
-
         return Ok(livro);
     }
 
     [HttpPost]
     public async Task<IActionResult> AdicionarLivro( AddLivrosDto livro)
     {
-        // Validação do ISBN
-        if (string.IsNullOrEmpty(livro.ISBN))
-            return BadRequest("O ISBN é obrigatório.");
-
-        // Validação do nome do livro
-        if (string.IsNullOrEmpty(livro.BookName))
-            return BadRequest("O título do livro é obrigatório.");
-
-        // Verificação se o livro já existe
-        var livroExistente = await _service.ObterPorISBNAsync(livro.ISBN);
-        if (livroExistente != null) // Livro já existe
-            return Conflict("O livro já existe no sistema.");
-
-        try
-        {
-            // Adicionar o livro
+        // Adicionar o livro
             await _service.AdicionarLivroAsync(livro);
             return CreatedAtAction(nameof(ObterPorISBN), new { isbn = livro.ISBN }, livro);
-        }
-        catch (Exception ex)
-        {
-            // Tratar erros inesperados
-            return StatusCode(500, $"Erro interno: {ex.Message}");
-        }
+       
     }
 
     [HttpPut("{isbn}")]
     public async Task<IActionResult> AtualizarLivro(string isbn, UpdateLivrosDto livro)
     {
-        if (isbn != livro.ISBN)
-            return BadRequest("ISBN não pode ser alterado.");
-
-
-
-        try
-        {
-            await _service.AtualizarLivroAsync(livro);
+       
+        await _service.AtualizarLivroAsync(livro);
             return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+    
     }
 
     [HttpDelete("{isbn}")]
     public async Task<IActionResult> ExcluirLivro(string isbn)
     {
 
-        var livroexist = await _service.ObterPorISBNAsync(isbn);
-        if (livroexist == null)
-            return NotFound($"O livro com o isbn: {isbn} não encontrado.");
-        try
-        {
+        
             await _service.ExcluirLivroAsync(isbn);
             return NoContent();
-        }
+        
 
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+ 
     }
 
 }
