@@ -2,19 +2,20 @@
 {
     public class MessagingHelperDTO
     {
-        
+
         public void SendMessage(MessageDTO messageDto)
         {
             try
             {
                 // Simula a lógica de envio de uma mensagem
                 Console.WriteLine($"Mensagem enviada com Sucesso  : {messageDto.Message}");
-                messageDto.Success = true;
+
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Erro ao enviar mensagem: {ex.Message}");
-                messageDto.Success= false;  
+
             }
         }
 
@@ -32,5 +33,29 @@
                 return new List<string>();
             }
         }
+
+        public bool  ValidateMessage(MessageDTO messageDto)
+        {
+            if (string.IsNullOrWhiteSpace(messageDto.Message))
+            {
+                Console.WriteLine("A mensagem não pode estar vazia.");
+                return messageDto.Success = false;
+            }
+                if (messageDto.Message.Length > 256)
+                {
+                    Console.WriteLine("A mensagem excede o tamanho permitido.");
+                    return messageDto.Success = false;
+                }
+                else
+                {
+                Console.WriteLine("Validação confirmada.");
+                    return messageDto.Success=true ;
+                }
+            }
+        }
+
+
+
+
+
     }
-}

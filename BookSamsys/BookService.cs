@@ -2,6 +2,7 @@
 using BookSamsys.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,16 +22,20 @@ public class BookService : IBookService
         var livros = await _repository.ListarLivrosAsync(page, pageSize);
         var messageDto = new MessageDTO { Message = "Listar Livros !" };
         var messagingHelper = new MessagingHelperDTO();
+        messagingHelper.ValidateMessage(messageDto);
         messagingHelper.SendMessage(messageDto);
 
         if (messageDto.Success == true)
         {
-            Console.WriteLine("A mensagem foi enviada com sucesso.");
+            Console.WriteLine("A mensagem foi envidada com sucesso total.");
         }
-        else
+        else 
         {
             Console.WriteLine("Falha ao enviar a mensagem.");
         }
+        
+
+
         return livros.Select(l => new BookDTO
         {
             ISBN = l.ISBN,
@@ -40,6 +45,12 @@ public class BookService : IBookService
             Price = l.Price,
         });
     }
+
+
+
+
+
+
 
     public async Task<BookDTO?> ObterPorISBNAsync(string isbn)
     {
@@ -65,7 +76,10 @@ public class BookService : IBookService
 
 
 
-    /**********************************add********************************/
+
+
+
+    /**********************************ADD********************************/
 
 
     public async Task AdicionarLivroAsync(AddLivrosDto livro)
@@ -84,8 +98,6 @@ public class BookService : IBookService
             throw new InvalidOperationException("O livro já existe no sistema.");
 
 
-
-
         // Mapear o livro
         Book addLivro = new()
         {
@@ -96,22 +108,21 @@ public class BookService : IBookService
         };
 
        
-           
-
-        // Adicionar o livro
+         // Adicionar o livro
         await _repository.AdicionarLivroAsync(addLivro);
 
         // Enviar notificação
         // Instância do helper
-        var messageDto = new MessageDTO { Message = "Olá, Mundo!" };
+        var messageDto = new MessageDTO { Message = "Vais Adicionar um Livro!" };
         var messagingHelper = new MessagingHelperDTO();
+        messagingHelper.ValidateMessage(messageDto);
         messagingHelper.SendMessage(messageDto);
 
         if (messageDto.Success== true)
         {
-            Console.WriteLine("A mensagem foi enviada com sucesso.");
+            Console.WriteLine("A mensagem foi enviada com sucesso total.");
         }
-        else
+        if (messageDto.Success == false)
         {
             Console.WriteLine("Falha ao enviar a mensagem.");
         }
@@ -119,15 +130,14 @@ public class BookService : IBookService
 
 
 
-        // Enviar mensagem
-        messagingHelper.SendMessage(messageDto);
+      
         
     }
 
 
 
 
-    /*************************************update**********************************/
+    /*************************************UPDATE**********************************/
 
 
     public async Task AtualizarLivroAsync(UpdateLivrosDto livro)
@@ -149,7 +159,7 @@ public class BookService : IBookService
 
 
 
-    /***********************************delete**************************************/
+    /***********************************DELETE**************************************/
 
 
     public async Task ExcluirLivroAsync(string isbn)
@@ -162,5 +172,19 @@ public class BookService : IBookService
 
         // Enviar notificação
         
+        var messageDto = new MessageDTO { Message = "apagar Livros !" };
+        var messagingHelper = new MessagingHelperDTO();
+        messagingHelper.ValidateMessage(messageDto);
+        messagingHelper.SendMessage(messageDto);
+
+        if (messageDto.Success == true)
+        {
+            Console.WriteLine("A mensagem foi envidada com sucesso total.");
+        }
+        else
+        {
+            Console.WriteLine("Falha ao enviar a mensagem.");
+        }
+
     }
 }
