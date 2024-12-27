@@ -42,18 +42,29 @@ public class BookRepository : IBookRepository
 
     public async Task<Book?> ObterPorISBNAsync(string isbn)
     {
-        return await _context.Livros2.
-            Include(l => l.Author)
-            .FirstOrDefaultAsync(l => l.ISBN == isbn && !l.IsDeleted);
+        
+        return await _context.Livros2
+          
+        .Include(l => l.Author)
+        .FirstOrDefaultAsync(l => l.ISBN == isbn && !l.IsDeleted);
     }
 
+
+    public async Task<Book?>ObterPorISBNexl(string isbn)
+    {
+        return await _context.Livros2
+             .Include(l => l.Author)
+        .FirstOrDefaultAsync(l => l.ISBN == isbn);
+    }
 
 
 
     public async Task AdicionarLivroAsync(Book livro)
     {
+
         _context.Livros2.Add(livro);
         await _context.SaveChangesAsync();
+
     }
 
     public async Task AtualizarLivroAsync(Book livro)

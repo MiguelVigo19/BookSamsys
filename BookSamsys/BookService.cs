@@ -93,9 +93,25 @@ public class BookService : IBookService
             throw new ArgumentException("O título do livro é obrigatório.");
 
         // Verificação se o livro já existe
-        var livroExistente = await _repository.ObterPorISBNAsync(livro.ISBN);
-        if (livroExistente != null) 
+        var livroExistente = await _repository.ObterPorISBNexl(livro.ISBN);
+        if (livroExistente != null)
+        {
+            // Se o livro existir e estiver marcado como excluído
+            if (livroExistente.IsDeleted)
+            {
+                livroExistente.IsDeleted= false;
+                
+                livroExistente.BookName = livro.BookName;
+                livroExistente.IdAuthor = livro.IdAuthor;
+                livroExistente.Price = livro.Price;
+                await _repository.AtualizarLivroAsync(livroExistente);
+                return;
+
+            }
+
+            // Caso contrário, lançar uma exceção
             throw new InvalidOperationException("O livro já existe no sistema.");
+        }
 
 
         // Mapear o livro
@@ -107,8 +123,8 @@ public class BookService : IBookService
             Price = livro.Price
         };
 
-       
-         // Adicionar o livro
+
+        // Adicionar o livro
         await _repository.AdicionarLivroAsync(addLivro);
 
         // Enviar notificação
@@ -118,7 +134,7 @@ public class BookService : IBookService
         messagingHelper.ValidateMessage(messageDto);
         messagingHelper.SendMessage(messageDto);
 
-        if (messageDto.Success== true)
+        if (messageDto.Success == true)
         {
             Console.WriteLine("A mensagem foi enviada com sucesso total.");
         }
@@ -126,14 +142,15 @@ public class BookService : IBookService
         {
             Console.WriteLine("Falha ao enviar a mensagem.");
         }
+    }
         
 
 
 
       
         
-    }
-
+    
+    
 
 
 
@@ -169,6 +186,8 @@ public class BookService : IBookService
             throw new KeyNotFoundException($"O livro com o ISBN {isbn} não existe.");
 
         await _repository.ExcluirLivroAsync(isbn);
+        
+        
 
         // Enviar notificação
         

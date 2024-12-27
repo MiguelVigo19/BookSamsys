@@ -13,6 +13,9 @@ namespace BookSamsys.DTO
         public int IdAuthor { get; set; }
 
         public string? Price { get; set; }
+
+        //[JsonIgnore]
+        //public bool Isdelete { get; set; }=false;
        
 
     }

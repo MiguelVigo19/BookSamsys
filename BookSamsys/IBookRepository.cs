@@ -13,6 +13,7 @@ public interface IBookRepository
         Task AtualizarLivroAsync(Book livro);
         Task ExcluirLivroAsync(string isbn);
     Task <Author?>ObterAutorPorIdAsync(int id);
+    Task<Book?> ObterPorISBNexl(string isbn);
 
 }
 
